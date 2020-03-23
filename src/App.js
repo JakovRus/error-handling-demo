@@ -1,11 +1,18 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import {withLoader} from "./hocs/with-loader";
-import {withDataSource} from "./hocs/with-data-source";
+import {withService} from "./hocs/with-service";
+import {GITHUB_SERVICE_NAME} from "./services/github";
 
 function DemoComponentBase(props) {
-  const {data} = props;
+  const [data, setData] = useState(null);
+  const {service} = props;
+
+  useEffect(() => {
+    service.getRepository()
+      .then(res => setData(res))
+  }, []);
 
   return (
     <div>
@@ -16,10 +23,9 @@ function DemoComponentBase(props) {
   )
 }
 
-const DemoComponent = withDataSource(DemoComponentBase, {
-  url: 'users/JakovRus/events1',
-  contentType: 'json',
-  errors: [{code: 404, message: 'Not found1'}]
+const DemoComponent = withService(DemoComponentBase, {
+  serviceName: GITHUB_SERVICE_NAME,
+  errors: [{code: 404, message: 'Not found'}]
 });
 
 function AppBase() {
