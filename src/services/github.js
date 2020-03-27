@@ -6,7 +6,7 @@ function getGithubService(fetcher) {
   return {
     getRepository: () => {
       return fetcher
-        .url('users/JakovRus/events1')
+        .url('users/JakovRus/events')
         .get()
         .json();
     }
